@@ -1,13 +1,11 @@
-import './App.css';
+import { Outlet } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 function App() {
   return (
     <>
-      <div>
-        <div>
-          <p>Leetlab coding platform</p>
-        </div>
-      </div>
+      <Outlet />
+      <TanStackRouterDevtools />
     </>
   );
 }
