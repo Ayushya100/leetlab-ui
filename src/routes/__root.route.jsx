@@ -1,25 +1,6 @@
-import { Outlet, createRootRoute, Link } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { createRootRoute } from '@tanstack/react-router';
+import App from '../App';
 
 export const rootRoute = createRootRoute({
-  component: RootComponent,
+  component: App,
 });
-
-// eslint-disable-next-line react-refresh/only-export-components
-function RootComponent() {
-  return (
-    <>
-      <div className="p-2 flex gap-2">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{' '}
-        <Link to="/about" className="[&.active]:font-bold">
-          About
-        </Link>
-      </div>
-      <hr />
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  );
-}
