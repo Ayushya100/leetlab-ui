@@ -1,0 +1,33 @@
+.page-bg {
+    background-image: linear-gradient(#2D2D2D, #232323);
+}
+
+.sidenav-bg {
+    background-image: linear-gradient(#292929, #1a1a1a);
+}
+
+.sheet-bg {
+    background-color: #222326;
+}
+
+.btn {
+    background-image: linear-gradient(#4A4A4A, #333333);
+    border: 1px solid #1d1d1d;
+}
+
+.date-bg {
+    background-color: #313131;
+    color: white;
+}
+
+.padding-10 {
+    padding-top: 10px;
+}
+
+.padding-left-10 {
+    padding-left: 10px;
+}
+
+.margin-20 {
+    margin: 20px 0;
+}
