@@ -120,7 +120,7 @@ export function getProblemsLayoutActions(scopes: Array<string> = []) {
     AdminActionOptions[1]['sub-actions'].push({
       header: 'Manage User Scopes',
       icon: <ShieldCheck size={18} />,
-      action: 'user-scopes',
+      action: '/setting/scope',
     });
   }
 

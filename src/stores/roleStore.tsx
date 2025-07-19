@@ -41,7 +41,7 @@ export const useRoleStore = create<RoleStore>()((set) => ({
   registerUserRoles: (userRoles: Array<Role>) => set({ roles: userRoles }),
   clearUserRoles: () => set({ roles: [] }),
   registerUserRoleDtl: (userRoleDtl: Role) => set({ roleDtl: userRoleDtl }),
-  clearUserRoleDtl: () => set({ roleDtl: [] }),
+  clearUserRoleDtl: () => set({ roleDtl: {} }),
   registerUserRoleScope: (userRoleScope: Array<Scope>) => set({ roleScopes: userRoleScope }),
   clearUserRoleScope: () => set({ roleScopes: [] }),
   registerUnassignedScopes: (userScope: Array<Scope>) => set({ unassignedScopes: userScope }),

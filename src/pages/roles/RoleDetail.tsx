@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Form from '@/components/Form';
 import { DataTable } from '@/components/DataTable';
 import { PopupTable } from '@/components/PopupTable';
+import { PopupMessage } from '@/components/PopupMessage';
 
 // Stores
 import { useUserStore } from '@/stores/userStore';
@@ -12,10 +13,9 @@ import { useRoleStore } from '@/stores/roleStore';
 
 // Services
 import userRoleService from '@/services/userRoles.service';
-import { PopupMessage } from '@/components/PopupMessage';
 
-// Table Header
-const tableHeaders = [
+// Form Header
+const formHeaders = [
   {
     label: 'Role Code',
     key: 'roleCode',
@@ -66,6 +66,7 @@ const scopeHeader = [
 ];
 
 function RoleDetailPage() {
+  const [headers, setHeaders] = useState(formHeaders);
   const [pageTitle, setPageTitle] = useState('Add');
   const [activeTab, setActiveTab] = useState('detail');
   const [messagePopupTitle, setMessagePopupTitle] = useState('');
@@ -107,9 +108,16 @@ function RoleDetailPage() {
 
         if (id !== 'NEW' && scopes.includes('ROLE.U')) {
           setPageTitle(`Update | ${response.roleDesc}`);
+          setHeaders(formHeaders.map((header) => {
+            header.readOnly = header.key === 'roleCode' ? true : header.readOnly;
+            return header;
+          }));
         } else {
           setPageTitle(`View | ${response.roleDesc}`);
-          tableHeaders.map((header) => (header.readOnly = true));
+          setHeaders(formHeaders.map((header) => {
+            header.readOnly = true;
+            return header;
+          }));
         }
       } catch (err) {
         console.error(`Error fetching user role details: ${err}`);
@@ -118,6 +126,15 @@ function RoleDetailPage() {
 
     if (id === 'NEW') {
       setPageTitle('Add');
+      
+      const updatedFormData = formHeaders.map((header) => {
+        header.readOnly = header.key === 'roleCode' ? false : header.readOnly;
+        return header;
+      }).filter((header) => {
+        const fieldsToExclude = ['createdDate', 'modifiedDate'];
+        return !fieldsToExclude.includes(header.key);
+      });
+      setHeaders(updatedFormData);
     } else {
       fetchData();
     }
@@ -258,7 +275,7 @@ function RoleDetailPage() {
           <Form
             tableHeader={'Role Details'}
             tableSummary={'A summary that defines the purpose and responsibilities of the role.'}
-            headers={tableHeaders}
+            headers={headers}
             data={roleDtl}
             updateAllowed={scopes.includes('ROLE.U')}
             onClickAction={onRoleUpdateAction}

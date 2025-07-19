@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from '@tanstack/react-router';
 
+// Components
 import { DataTable } from '@/components/DataTable';
+import { PopupMessage } from '@/components/PopupMessage';
+
+// Service
 import userRoleService from '@/services/userRoles.service';
+
+// Stores
 import { useUserStore } from '@/stores/userStore';
 import { useRoleStore } from '@/stores/roleStore';
-import { PopupMessage } from '@/components/PopupMessage';
 
 // Table Header
 const header = [
@@ -56,14 +61,14 @@ function RolesPage() {
   }, []);
 
   // User Action
-  const onUserAction = (actionData: any) => {
-    if (actionData.id) {
-      setActionId(actionData.id);
+  const onUserAction = (action: any) => {
+    if (action.id) {
+      setActionId(action.id);
     }
 
-    if (actionData.type === 'update' || actionData.type === 'add') {
-      navigate({ to: `/setting/role/${actionData.id}` });
-    } else if (actionData.type === 'delete') {
+    if (action.type === 'update' || action.type === 'add') {
+      navigate({ to: `/setting/role/${action.id}` });
+    } else if (action.type === 'delete') {
       setMessagePopupTitle('Delete User Role');
       setMessagePopupMessage('Are you sure to delete the user role');
       setShowPopupMessage(true);
