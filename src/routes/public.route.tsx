@@ -1,5 +1,7 @@
 import { createRoute } from '@tanstack/react-router';
 import { rootRoute } from './index.route';
+
+// Layout
 import PublicLayout from '@/layouts/PublicLayout';
 
 // Route Component

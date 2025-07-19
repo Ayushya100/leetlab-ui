@@ -1,12 +1,14 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 import { rootRoute } from './index.route';
+
+// Layout
 import ProblemsLayout from '@/layouts/ProblemsLayout';
+
+// Store
 import { useUserStore } from '@/stores/userStore';
 
 // Route Component
 import ProblemListingPage from '@/pages/problems/ProblemList';
-import RolesPage from '@/pages/roles/Roles';
-import SettingsPage from '@/pages/user/Settings';
 
 // Problem Layout Parent
 const problemLayoutRoute = createRoute({
