@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface Scope {
   id: string;
@@ -10,20 +10,20 @@ interface Scope {
 }
 
 interface ScopeStore {
-    scopes: Array<Scope>;
-    scopeDtl: any | Scope,
-    registerUserScopes: (userScopes: Array<Scope>) => void;
-    clearUserScopes: () => void;
-    registerUserScopeDtl: (userScopeDtl: Scope) => void;
-    clearUserScopeDtl: () => void;
+  scopes: Array<Scope>;
+  scopeDtl: any | Scope;
+  registerUserScopes: (userScopes: Array<Scope>) => void;
+  clearUserScopes: () => void;
+  registerUserScopeDtl: (userScopeDtl: Scope) => void;
+  clearUserScopeDtl: () => void;
 }
 
 export const useScopeStore = create<ScopeStore>()((set) => ({
-    scopes: [],
-    scopeDtl: {},
+  scopes: [],
+  scopeDtl: {},
 
-    registerUserScopes: (userScopes: Array<Scope>) => set({ scopes: userScopes }),
-    clearUserScopes: () => set({ scopes: [] }),
-    registerUserScopeDtl: (userScopeDtl: Scope) => set({ scopeDtl: userScopeDtl }),
-    clearUserScopeDtl: () => set({ scopeDtl: {} })
+  registerUserScopes: (userScopes: Array<Scope>) => set({ scopes: userScopes }),
+  clearUserScopes: () => set({ scopes: [] }),
+  registerUserScopeDtl: (userScopeDtl: Scope) => set({ scopeDtl: userScopeDtl }),
+  clearUserScopeDtl: () => set({ scopeDtl: {} }),
 }));
