@@ -61,7 +61,7 @@ function ScopesPage() {
       navigate({ to: `/setting/scope/${action.id}` });
     } else if (action.type === 'delete') {
       setMessagePopupTitle('Delete User Scope');
-      setMessagePopupMessage('Are you sure to delete the user scope');
+      setMessagePopupMessage('Are you sure to delete the user scope?');
       setShowPopupMessage(true);
     }
   };

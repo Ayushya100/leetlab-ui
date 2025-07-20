@@ -54,7 +54,7 @@ function RolesPage() {
         const response = await userRoleService.fetchAllUserRole();
         registerUserRoles(response);
       } catch (err) {
-        console.error(`Error fetching user roles: ${err}`);
+        console.error(`Error fetching user roles: ${JSON.stringify(err)}`);
       }
     };
     fetchData();
@@ -82,7 +82,7 @@ function RolesPage() {
         const updatedRolesList = roles.filter((role) => role.id !== response.id);
         registerUserRoles(updatedRolesList);
       } catch (err) {
-        console.error(`Error deleteing user role: ${err}`);
+        console.error(`Error deleteing user role: ${JSON.stringify(err)}`);
       }
     }
     setShowPopupMessage(false);

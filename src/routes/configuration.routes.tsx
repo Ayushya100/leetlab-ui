@@ -14,6 +14,8 @@ import ScopesPage from '@/pages/scopes/Scopes';
 import ScopeDetailPage from '@/pages/scopes/ScopeDetail';
 import ServicesPage from '@/pages/services/Services';
 import ServiceDetailPage from '@/pages/services/ServiceDetail';
+import RoutesPage from '@/pages/routes/Routes';
+import RouteDetailPage from '@/pages/routes/RouteDetail';
 
 // Configuration Layout Parent
 const configurationLayoutRoute = createRoute({
@@ -119,7 +121,7 @@ const serviceRoute = createRoute({
   },
 });
 
-const serviceDetailPage = createRoute({
+const serviceDetailRoute = createRoute({
   getParentRoute: () => configurationLayoutRoute,
   path: '/service/$id',
   component: ServiceDetailPage,
@@ -136,7 +138,50 @@ const serviceDetailPage = createRoute({
   },
 });
 
+const routesRoute = createRoute({
+  getParentRoute: () => configurationLayoutRoute,
+  path: '/route',
+  component: RoutesPage,
+  beforeLoad: () => {
+    const { scopes } = useUserStore.getState();
+    if (!scopes.includes('ROUTE.V')) {
+      throw redirect({
+        to: '/',
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
+});
+
+const routeDetailRoute = createRoute({
+  getParentRoute: () => configurationLayoutRoute,
+  path: '/route/$id',
+  component: RouteDetailPage,
+  beforeLoad: () => {
+    const { scopes } = useUserStore.getState();
+    if (!scopes.includes('ROUTE.V')) {
+      throw redirect({
+        to: '/',
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
+});
+
 // Add child routes to Parent route
-const configurationRoute = configurationLayoutRoute.addChildren([userRoleRoute, userRoleDetailRoute, userScopeRoute, userScopeDetailRoute, serviceRoute, serviceDetailPage]);
+const configurationRoute = configurationLayoutRoute.addChildren([
+  userRoleRoute,
+  userRoleDetailRoute,
+  userScopeRoute,
+  userScopeDetailRoute,
+  serviceRoute,
+  serviceDetailRoute,
+  routesRoute,
+  routeDetailRoute,
+]);
 
 export default configurationRoute;

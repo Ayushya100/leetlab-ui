@@ -124,7 +124,7 @@ function RoleDetailPage() {
           );
         }
       } catch (err) {
-        console.error(`Error fetching user role details: ${err}`);
+        console.error(`Error fetching user role details: ${JSON.stringify(err)}`);
       }
     };
 
@@ -181,7 +181,7 @@ function RoleDetailPage() {
       setSelectedIds([]);
       setSelectedActionIds([]);
     } catch (err) {
-      console.error(`Error updating user scopes: ${err}`);
+      console.error(`Error updating user scopes: ${JSON.stringify(err)}`);
     }
   };
 
@@ -239,7 +239,7 @@ function RoleDetailPage() {
       registerUserRoleScope(response);
       setScopesFetched(true);
     } catch (err) {
-      console.error(`Error fetching user scope details: ${err}`);
+      console.error(`Error fetching user scope details: ${JSON.stringify(err)}`);
     }
   };
 
