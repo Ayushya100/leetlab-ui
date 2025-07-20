@@ -17,7 +17,7 @@ export default function Form({ tableHeader, tableSummary, headers, data = {}, up
           <div className="text-sm w-full secondary-text">{tableSummary}</div>
           <div className="border-b border-color mt-6 w-full"></div>
           {headers.map((field: any, fieldIdx: number) => (
-            <div key={fieldIdx} className="w-full flex flex-row gap-2 p-4 border-b border-color">
+            <div key={fieldIdx} className="w-full flex flex-row gap-2 p-4 border-b border-color items-center">
               <label className="text-smfont-medium secondary-text pl-1 basis-1/3">{field.label}</label>
 
               {/* Plain Text Field */}
@@ -52,15 +52,36 @@ export default function Form({ tableHeader, tableSummary, headers, data = {}, up
                   />
                   <div
                     className={`w-9 h-5 bg-gray-300 rounded-full relative transition-colors
-                                        peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-transparent
-                                        peer-checked:bg-blue-600
-                                        peer-disabled:bg-gray-200 peer-disabled:cursor-not-allowed
-                                        after:content-[''] after:absolute after:top-[2px] after:left-[2px]
-                                        after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform
-                                        peer-checked:after:translate-x-4
-                                        peer-disabled:after:bg-gray-100`}
+                      peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-transparent
+                      peer-checked:bg-blue-600
+                      peer-disabled:bg-gray-200 peer-disabled:cursor-not-allowed
+                      after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                      after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform
+                      peer-checked:after:translate-x-4
+                      peer-disabled:after:bg-gray-100`}
                   ></div>
                 </label>
+              )}
+
+              {/* Dropdown Field */}
+              {field.type === 'options' && !field.readOnly && (
+                <select
+                  value={data[field.key] ?? ''}
+                  onChange={(e) => {
+                    const newData = { ...data, [field.key]: e.target.value };
+                    onDataChange(newData);
+                  }}
+                  className="p-2 text-sm w-full primary-text basis-2/3 focus:outline-none rounded-md form-text-field"
+                >
+                  <option value="" disabled>
+                    -- select an option --
+                  </option>
+                  {field.options?.map((option: any, idx: number) => (
+                    <option key={idx} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               )}
             </div>
           ))}

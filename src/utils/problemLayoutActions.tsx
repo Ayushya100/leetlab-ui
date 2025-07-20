@@ -128,7 +128,7 @@ export function getProblemsLayoutActions(scopes: Array<string> = []) {
     AdminActionOptions[1]['sub-actions'].push({
       header: 'Manage Services',
       icon: <Settings2 size={18} />,
-      action: 'services',
+      action: '/setting/service',
     });
   }
 

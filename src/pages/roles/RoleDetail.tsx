@@ -108,16 +108,20 @@ function RoleDetailPage() {
 
         if (id !== 'NEW' && scopes.includes('ROLE.U')) {
           setPageTitle(`Update | ${response.roleDesc}`);
-          setHeaders(formHeaders.map((header) => {
-            header.readOnly = header.key === 'roleCode' ? true : header.readOnly;
-            return header;
-          }));
+          setHeaders(
+            formHeaders.map((header) => {
+              header.readOnly = header.key === 'roleCode' ? true : header.readOnly;
+              return header;
+            })
+          );
         } else {
           setPageTitle(`View | ${response.roleDesc}`);
-          setHeaders(formHeaders.map((header) => {
-            header.readOnly = true;
-            return header;
-          }));
+          setHeaders(
+            formHeaders.map((header) => {
+              header.readOnly = true;
+              return header;
+            })
+          );
         }
       } catch (err) {
         console.error(`Error fetching user role details: ${err}`);
@@ -126,14 +130,16 @@ function RoleDetailPage() {
 
     if (id === 'NEW') {
       setPageTitle('Add');
-      
-      const updatedFormData = formHeaders.map((header) => {
-        header.readOnly = header.key === 'roleCode' ? false : header.readOnly;
-        return header;
-      }).filter((header) => {
-        const fieldsToExclude = ['createdDate', 'modifiedDate'];
-        return !fieldsToExclude.includes(header.key);
-      });
+
+      const updatedFormData = formHeaders
+        .map((header) => {
+          header.readOnly = header.key === 'roleCode' ? false : header.readOnly;
+          return header;
+        })
+        .filter((header) => {
+          const fieldsToExclude = ['createdDate', 'modifiedDate'];
+          return !fieldsToExclude.includes(header.key);
+        });
       setHeaders(updatedFormData);
     } else {
       fetchData();

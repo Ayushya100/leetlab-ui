@@ -1,30 +1,38 @@
-import { useEffect, useState } from 'react';
 import { useRouter } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
 // Components
 import { DataTable } from '@/components/DataTable';
 import { PopupMessage } from '@/components/PopupMessage';
 
-// Service
-import userScopeService from '@/services/userScopes.service';
+// Services
+import serviceConfigurations from '@/services/serviceConfigurations.service';
 
 // Stores
-import { useScopeStore } from '@/stores/scopeStore';
+import { useServiceStore } from '@/stores/serviceStore';
 import { useUserStore } from '@/stores/userStore';
 
 // Table Header
 const header = [
   {
-    label: 'Scope Code',
-    key: 'scopeCode',
+    label: 'Service',
+    key: 'microservice',
   },
   {
-    label: 'Scope Description',
-    key: 'scopeDesc',
+    label: 'Environment',
+    key: 'environment',
+  },
+  {
+    label: 'Protocol',
+    key: 'protocol',
+  },
+  {
+    label: 'Port',
+    key: 'port',
   },
 ];
 
-function ScopesPage() {
+function ServicesPage() {
   const [actionId, setActionId] = useState('');
   const [showPopupMessage, setShowPopupMessage] = useState(false);
   const [messagePopupTitle, setMessagePopupTitle] = useState('');
@@ -34,8 +42,8 @@ function ScopesPage() {
   const { navigate } = useRouter();
 
   // Stores
-  const scope = useScopeStore((state) => state.scopes);
-  const registerUserScopes = useScopeStore((state) => state.registerUserScopes);
+  const services = useServiceStore((state) => state.services);
+  const registerServices = useServiceStore((state) => state.registerServices);
 
   // Scopes
   const { scopes } = useUserStore.getState();
@@ -43,37 +51,38 @@ function ScopesPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await userScopeService.fetchAllUserScope();
-        registerUserScopes(response);
+        const response = await serviceConfigurations.fetchAllServices();
+        registerServices(response);
       } catch (err) {
-        console.error(`Error fetching user scopes: ${err}`);
+        console.error(`Error fetching services: ${err}`);
       }
     };
     fetchData();
   }, []);
 
+  // User Actions
   const onUserAction = (action: any) => {
     if (action.id) {
       setActionId(action.id);
     }
 
     if (action.type === 'update' || action.type === 'add') {
-      navigate({ to: `/setting/scope/${action.id}` });
+      navigate({ to: `/setting/service/${action.id}` });
     } else if (action.type === 'delete') {
-      setMessagePopupTitle('Delete User Scope');
-      setMessagePopupMessage('Are you sure to delete the user scope');
       setShowPopupMessage(true);
+      setMessagePopupTitle('Delete Service Configuration');
+      setMessagePopupMessage('Are you sure to delete the service configuration');
     }
   };
 
   const onPopupMessageAction = async (action: any) => {
     if (action.type === 'confirm') {
       try {
-        const response = await userScopeService.deleteUserScope(actionId);
-        const updatedScopesList = scope.filter((scp) => scp.id !== response.id);
-        registerUserScopes(updatedScopesList);
+        const response = await serviceConfigurations.deleteServiceById(actionId);
+        const updatedServiceList = services.filter((service) => service.id !== response.id);
+        registerServices(updatedServiceList);
       } catch (err) {
-        console.error(`Error deleting user scope: ${err}`);
+        console.error(`Error deleting service configuration: ${JSON.stringify(err)}`);
       }
     }
     setShowPopupMessage(false);
@@ -83,12 +92,12 @@ function ScopesPage() {
     <div className="w-full h-full p-4">
       <div className="card h-full p-4 pb-6 rounded-md">
         <DataTable
-          title={'User Scopes'}
+          title={'Services'}
           headers={header}
-          tableData={scope}
-          addAllowed={scopes.includes('SCOPE.U')}
-          updateAllowed={scopes.includes('SCOPE.U')}
-          deleteAllowed={scopes.includes('SCOPE.D')}
+          tableData={services}
+          addAllowed={scopes.includes('SERVICE.U')}
+          updateAllowed={scopes.includes('SERVICE.U')}
+          deleteAllowed={scopes.includes('SERVICE.D')}
           itemsPerPage={10}
           onClickAction={onUserAction}
         />
@@ -99,4 +108,4 @@ function ScopesPage() {
   );
 }
 
-export default ScopesPage;
+export default ServicesPage;

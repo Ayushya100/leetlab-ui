@@ -12,6 +12,8 @@ import RolesPage from '@/pages/roles/Roles';
 import RoleDetailPage from '@/pages/roles/RoleDetail';
 import ScopesPage from '@/pages/scopes/Scopes';
 import ScopeDetailPage from '@/pages/scopes/ScopeDetail';
+import ServicesPage from '@/pages/services/Services';
+import ServiceDetailPage from '@/pages/services/ServiceDetail';
 
 // Configuration Layout Parent
 const configurationLayoutRoute = createRoute({
@@ -76,8 +78,8 @@ const userScopeRoute = createRoute({
       throw redirect({
         to: '/',
         search: {
-          redirect: location.href
-        }
+          redirect: location.href,
+        },
       });
     }
   },
@@ -93,19 +95,48 @@ const userScopeDetailRoute = createRoute({
       throw redirect({
         to: '/',
         search: {
-          redirect: location.href
-        }
+          redirect: location.href,
+        },
+      });
+    }
+  },
+});
+
+const serviceRoute = createRoute({
+  getParentRoute: () => configurationLayoutRoute,
+  path: '/service',
+  component: ServicesPage,
+  beforeLoad: () => {
+    const { scopes } = useUserStore.getState();
+    if (!scopes.includes('SERVICE.V')) {
+      throw redirect({
+        to: '/',
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
+});
+
+const serviceDetailPage = createRoute({
+  getParentRoute: () => configurationLayoutRoute,
+  path: '/service/$id',
+  component: ServiceDetailPage,
+  beforeLoad: () => {
+    const { scopes } = useUserStore.getState();
+    if (!scopes.includes('SERVICE.V')) {
+      throw redirect({
+        to: '/',
+        search: {
+          redirect: location.href,
+        },
       });
     }
   },
 });
 
 // Add child routes to Parent route
-const configurationRoute = configurationLayoutRoute.addChildren([
-  userRoleRoute,
-  userRoleDetailRoute,
-  userScopeRoute,
-  userScopeDetailRoute
-]);
+const configurationRoute = configurationLayoutRoute.addChildren([userRoleRoute, userRoleDetailRoute, userScopeRoute, userScopeDetailRoute, serviceRoute, serviceDetailPage]);
 
 export default configurationRoute;
