@@ -156,7 +156,7 @@ function ServiceDetailPage() {
 
         <Form
           tableHeader={'Service Details'}
-          tableSummary={''}
+          tableSummary={'A configuration that defines how backend services getting managed within the system.'}
           headers={headers}
           data={serviceDtl}
           updateAllowed={scopes.includes('SERVICE.U')}
