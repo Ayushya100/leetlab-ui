@@ -6,33 +6,29 @@ import { DataTable } from '@/components/DataTable';
 import { PopupMessage } from '@/components/PopupMessage';
 
 // Services
-import serviceConfigurations from '@/services/serviceConfigurations.service';
+import routesService from '@/services/routesConfigurations.service';
 
 // Stores
-import { useServiceStore } from '@/stores/serviceStore';
 import { useUserStore } from '@/stores/userStore';
+import { useRouteStore } from '@/stores/routeStore';
 
 // Table Header
 const header = [
   {
+    label: 'Path',
+    key: 'path',
+  },
+  {
+    label: 'Method',
+    key: 'method',
+  },
+  {
     label: 'Service',
-    key: 'microservice',
-  },
-  {
-    label: 'Environment',
-    key: 'environment',
-  },
-  {
-    label: 'Protocol',
-    key: 'protocol',
-  },
-  {
-    label: 'Port',
-    key: 'port',
+    key: 'service',
   },
 ];
 
-function ServicesPage() {
+function RoutesPage() {
   const [actionId, setActionId] = useState('');
   const [showPopupMessage, setShowPopupMessage] = useState(false);
   const [messagePopupTitle, setMessagePopupTitle] = useState('');
@@ -42,8 +38,8 @@ function ServicesPage() {
   const { navigate } = useRouter();
 
   // Stores
-  const services = useServiceStore((state) => state.services);
-  const registerServices = useServiceStore((state) => state.registerServices);
+  const routes = useRouteStore((state) => state.routes);
+  const registerRoutes = useRouteStore((state) => state.registerRoutes);
 
   // Scopes
   const { scopes } = useUserStore.getState();
@@ -51,38 +47,39 @@ function ServicesPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await serviceConfigurations.fetchAllServices();
-        registerServices(response);
+        const response = await routesService.fetchAllRoutes();
+        response.map((res: any) => (res.service = res.service.microservice));
+        registerRoutes(response);
       } catch (err) {
-        console.error(`Error fetching services: ${JSON.stringify(err)}`);
+        console.error(`Error fetching routes: ${JSON.stringify(err)}`);
       }
     };
     fetchData();
   }, []);
 
-  // User Actions
+  // User Action
   const onUserAction = (action: any) => {
     if (action.id) {
       setActionId(action.id);
     }
 
     if (action.type === 'update' || action.type === 'add') {
-      navigate({ to: `/setting/service/${action.id}` });
+      navigate({ to: `/setting/route/${action.id}` });
     } else if (action.type === 'delete') {
+      setMessagePopupTitle('Delete Route Configuration');
+      setMessagePopupMessage('Are you sure to delete the route configurations?');
       setShowPopupMessage(true);
-      setMessagePopupTitle('Delete Service Configuration');
-      setMessagePopupMessage('Are you sure to delete the service configuration');
     }
   };
 
   const onPopupMessageAction = async (action: any) => {
     if (action.type === 'confirm') {
       try {
-        const response = await serviceConfigurations.deleteServiceById(actionId);
-        const updatedServiceList = services.filter((service) => service.id !== response.id);
-        registerServices(updatedServiceList);
+        const response = await routesService.deleteRoute(actionId);
+        const updatedRoutesList = routes.filter((route: any) => route.id !== response.id);
+        registerRoutes(updatedRoutesList);
       } catch (err) {
-        console.error(`Error deleting service configuration: ${JSON.stringify(err)}`);
+        console.error(`Error deleting route configuration: ${JSON.stringify(err)}`);
       }
     }
     setShowPopupMessage(false);
@@ -92,12 +89,12 @@ function ServicesPage() {
     <div className="w-full h-full p-4">
       <div className="card h-full p-4 pb-6 rounded-md">
         <DataTable
-          title={'Services'}
+          title={'Routes'}
           headers={header}
-          tableData={services}
-          addAllowed={scopes.includes('SERVICE.U')}
-          updateAllowed={scopes.includes('SERVICE.U')}
-          deleteAllowed={scopes.includes('SERVICE.D')}
+          tableData={routes}
+          addAllowed={scopes.includes('ROUTE.U')}
+          updateAllowed={scopes.includes('ROUTE.U')}
+          deleteAllowed={scopes.includes('ROUTE.D')}
           itemsPerPage={10}
           onClickAction={onUserAction}
         />
@@ -108,4 +105,4 @@ function ServicesPage() {
   );
 }
 
-export default ServicesPage;
+export default RoutesPage;

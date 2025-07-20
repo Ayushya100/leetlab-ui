@@ -136,7 +136,7 @@ export function getProblemsLayoutActions(scopes: Array<string> = []) {
     AdminActionOptions[1]['sub-actions'].push({
       header: 'Manage Routes',
       icon: <Route size={18} />,
-      action: 'routes',
+      action: '/setting/route',
     });
   }
 

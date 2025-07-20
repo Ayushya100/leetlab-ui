@@ -81,7 +81,7 @@ function ScopeDetailPage() {
           );
         }
       } catch (err) {
-        console.error(`Error fetching user scope details: ${err}`);
+        console.error(`Error fetching user scope details: ${JSON.stringify(err)}`);
       }
     };
 
